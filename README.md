@@ -1,6 +1,6 @@
 # App_ftp_cliente
 
-This app is a basic FPT client built by Java. 
+This app is a basic FPT client built with Java. 
 
 - The selection of folder or Files is through JFileChooser in order to facilitate the experience.
 
