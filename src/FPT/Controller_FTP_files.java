@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 /**
  *
@@ -48,19 +49,17 @@ public class Controller_FTP_files {
         
     } 
     
-    public void download_files(String directory, HashMap<String, String> files){
+    public void download_files(String directory_destiny, ArrayList<FTPFile> files){
         
         try {
-            client.changeWorkingDirectory(directory);
-       
-            for (String file_name : files.keySet()){
-                
-                String file_path = files.get(file_name);
-                
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_path + "\\" + file_name));
+            BufferedOutputStream out = null; 
             
-                client.retrieveFile(file_name, out); 
+            for (FTPFile file : files){
+                
+                out = new BufferedOutputStream(new FileOutputStream(directory_destiny + "\\" + file.getName()+"_descargado"));
+                client.retrieveFile(file.getName(), out); 
             }
+            out.close();
 
         } catch (IOException ex) {
             Logger.getLogger(Controller_FTP_files.class.getName()).log(Level.SEVERE, null, ex);
