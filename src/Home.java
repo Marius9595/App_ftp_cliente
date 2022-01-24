@@ -148,6 +148,11 @@ public class Home extends javax.swing.JFrame {
         
     }
     
+    private void refresh_data() throws IOException{
+        files = cliente_ftp.listFiles();
+        put_info_textblock();
+        fill_JList();
+    }
     
     private class MouseListener extends MouseAdapter{
         
@@ -172,9 +177,7 @@ public class Home extends javax.swing.JFrame {
                 }
                 
    
-                files = cliente_ftp.listFiles();
-                put_info_textblock();
-                fill_JList();
+                refresh_data();
             } catch (IOException ex) {
                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -240,7 +243,7 @@ public class Home extends javax.swing.JFrame {
         lb_usuario.setText("jLabel4");
 
         btn_subir_fichero.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        btn_subir_fichero.setText("Subir fichero");
+        btn_subir_fichero.setText("Subir ficheros");
         btn_subir_fichero.setToolTipText("");
         btn_subir_fichero.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_subir_fichero.setMinimumSize(new java.awt.Dimension(150, 32));
@@ -251,7 +254,7 @@ public class Home extends javax.swing.JFrame {
         });
 
         btn_descargar_fichero.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        btn_descargar_fichero.setText("Descargar fichero");
+        btn_descargar_fichero.setText("Descargar ficheros");
         btn_descargar_fichero.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_descargar_fichero.setMinimumSize(new java.awt.Dimension(150, 32));
         btn_descargar_fichero.addActionListener(new java.awt.event.ActionListener() {
@@ -261,9 +264,14 @@ public class Home extends javax.swing.JFrame {
         });
 
         btn_eliminar_fichero.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        btn_eliminar_fichero.setText("Eliminar fichero");
+        btn_eliminar_fichero.setText("Eliminar ficheros");
         btn_eliminar_fichero.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_eliminar_fichero.setMinimumSize(new java.awt.Dimension(150, 32));
+        btn_eliminar_fichero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_ficheroActionPerformed(evt);
+            }
+        });
 
         btn_crear_carpeta.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btn_crear_carpeta.setText("Crear carpeta");
@@ -326,8 +334,8 @@ public class Home extends javax.swing.JFrame {
                                     .addComponent(btn_crear_carpeta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btn_eliminar_fichero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btn_descargar_fichero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btn_subir_fichero, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_eliminar_carpeta, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(btn_eliminar_carpeta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btn_subir_fichero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(67, 67, 67))
         );
@@ -383,6 +391,11 @@ public class Home extends javax.swing.JFrame {
             
             files = file_chooser.getSelectedFiles();
             controller_files.upload_files(files);
+            try {
+                refresh_data();
+            } catch (IOException ex) {
+                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.out.println("Open command cancelled by user.");
         }     
@@ -411,6 +424,41 @@ public class Home extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btn_descargar_ficheroActionPerformed
+
+    private void btn_eliminar_ficheroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ficheroActionPerformed
+        
+        ArrayList<String> files_to_delete = new ArrayList<String>();
+        
+        for (int index : list_directorio.getSelectedIndices()) {
+            
+            files_to_delete.add(current_directory + "/"+this.files[index-1].getName());
+        }
+        
+        int num_selected_files = files_to_delete.size();
+        if(num_selected_files > 0){
+           if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,"Estas a punto de eliminar ficheros " + num_selected_files,
+                "Aviso",JOptionPane.WARNING_MESSAGE)){
+               
+               controller_files.delete_files(files_to_delete);
+               
+               System.out.println( files_to_delete.get(0) );
+               try {
+                   refresh_data();
+               } catch (IOException ex) {
+                   Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+            
+            
+        }else{
+             JOptionPane.showMessageDialog(this,"No has seleccionado ningún archivo",
+                "Error",JOptionPane.ERROR_MESSAGE);
+        }
+
+        
+        
+        
+    }//GEN-LAST:event_btn_eliminar_ficheroActionPerformed
 
       
     /**

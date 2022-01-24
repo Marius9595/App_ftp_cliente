@@ -56,8 +56,8 @@
                                   <Component id="btn_crear_carpeta" alignment="0" max="32767" attributes="0"/>
                                   <Component id="btn_eliminar_fichero" alignment="1" max="32767" attributes="0"/>
                                   <Component id="btn_descargar_fichero" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="btn_subir_fichero" alignment="1" min="-2" pref="185" max="-2" attributes="0"/>
-                                  <Component id="btn_eliminar_carpeta" alignment="1" min="-2" pref="180" max="-2" attributes="0"/>
+                                  <Component id="btn_eliminar_carpeta" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="btn_subir_fichero" alignment="1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -165,7 +165,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Subir fichero"/>
+        <Property name="text" type="java.lang.String" value="Subir ficheros"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[150, 32]"/>
@@ -183,7 +183,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Descargar fichero"/>
+        <Property name="text" type="java.lang.String" value="Descargar ficheros"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[150, 32]"/>
         </Property>
@@ -200,7 +200,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Eliminar fichero"/>
+        <Property name="text" type="java.lang.String" value="Eliminar ficheros"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[150, 32]"/>
         </Property>
@@ -208,6 +208,9 @@
           <Dimension value="[150, 32]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_eliminar_ficheroActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_crear_carpeta">
       <Properties>

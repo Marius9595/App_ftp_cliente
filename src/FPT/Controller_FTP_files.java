@@ -30,8 +30,7 @@ public class Controller_FTP_files {
     public Controller_FTP_files(FTPClient client){
         this.client = client;
     }
-    
-     
+
     public void upload_files(File[] files){
         BufferedInputStream in = null;
         try {      
@@ -45,8 +44,7 @@ public class Controller_FTP_files {
 
         } catch (IOException ex) {
             System.out.println(ex.toString());
-        }
-        
+        } 
     } 
     
     public void download_files(String directory_destiny, ArrayList<FTPFile> files){
@@ -86,13 +84,11 @@ public class Controller_FTP_files {
         
     }
     
-    public void delete_files(String directory, ArrayList<String> files){
+    public void delete_files(ArrayList<String> files){
         
         try {
-            client.changeWorkingDirectory(directory);
-            
-            for (String file : files) {
-                
+
+            for (String file : files) {             
                 client.deleteFile(file);
             }
 
