@@ -12,5 +12,5 @@ import org.apache.commons.net.ftp.FTPClient;
  * @author Mario
  */
 public class Controller_FTP_folders {
-    private FTPClient client = Connection_FTP.get_connection(Config.server, Config.user, Config.password);
+    //private FTPClient client = Connection_FTP.get_connection(Config.server, Config.user, Config.password);
 }

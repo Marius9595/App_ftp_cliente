@@ -5,6 +5,7 @@
  */
 package FPT;
 
+import static FPT.Config.password;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 public class Connection_FTP {
     
-        private FTPClient client;
+        static private FTPClient client;
         
         public Connection_FTP(String server, String user,  String password){
                         
@@ -38,9 +39,9 @@ public class Connection_FTP {
         }
         
         
-        public static FTPClient get_connection(String server, String user, String password){
+        public static FTPClient get_connection(){
             
-            return new Connection_FTP(server, user, password).client;     
+            return new Connection_FTP(Config.server, Config.user, Config.password).client;     
         }
         
     

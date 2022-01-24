@@ -7,6 +7,7 @@ package FPT;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,28 +24,26 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 public class Controller_FTP_files {
     
-    private FTPClient client = Connection_FTP.get_connection(Config.server, Config.user, Config.password);
+    private FTPClient client;
+    
+    public Controller_FTP_files(FTPClient client){
+        this.client = client;
+    }
     
      
-    public void upload_files(String directory, HashMap<String, String> files){
-        
-        try {
-            client.changeWorkingDirectory(directory);
-            
+    public void upload_files(File[] files){
+        BufferedInputStream in = null;
+        try {      
             client.setFileType(FTP.BINARY_FILE_TYPE);
             
-            
-            for (String file_name : files.keySet()){
-                
-                String file_path = files.get(file_name);
-                
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_path + "\\" + file_name));
-            
-                client.retrieveFile(file_name, out); 
+            for (File file : files){              
+                in  = new BufferedInputStream(new FileInputStream(file));           
+                client.storeFile(file.getName(), in); 
             }
+            in.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(Controller_FTP_files.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
         
     } 
@@ -58,9 +57,9 @@ public class Controller_FTP_files {
                 
                 String file_path = files.get(file_name);
                 
-                BufferedInputStream in = new BufferedInputStream(new FileInputStream(file_path + "\\" + file_name));
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_path + "\\" + file_name));
             
-                client.storeFile(file_name, in); 
+                client.retrieveFile(file_name, out); 
             }
 
         } catch (IOException ex) {

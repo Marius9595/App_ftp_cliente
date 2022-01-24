@@ -11,8 +11,8 @@ package FPT;
  */
 public class Config {
     
-    public static String server = "localhost";
-    public static String user = "usuario2";
-    public static String password = "123";
+    public static String server = "::1";
+    public static String user = "usuario";
+    public static String password = "1234";
     
 }
