@@ -23,7 +23,6 @@ public class Connection_FTP {
                         
             try {
                 this.client = new  FTPClient();
-                
                 this.client.connect(server);
                 
                 boolean login = this.client.login(user, password);
@@ -41,6 +40,7 @@ public class Connection_FTP {
         
         public static FTPClient get_connection(){
             
+
             return new Connection_FTP(Config.server, Config.user, Config.password).client;     
         }
         

@@ -1,7 +1,7 @@
 
 import FPT.Config;
 import FPT.Connection_FTP;
-import FPT.Controller_FTP_files;
+import FPT.Controller_FTP;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,7 +32,7 @@ import org.apache.commons.net.ftp.FTPFile;
 public class Home extends javax.swing.JFrame {
 
     FTPClient cliente_ftp = Connection_FTP.get_connection();
-    Controller_FTP_files controller_files;
+    Controller_FTP controller_files;
     
     FTPFile[] files;
     
@@ -49,7 +49,7 @@ public class Home extends javax.swing.JFrame {
         
         initComponents();
         
-        controller_files = new Controller_FTP_files(cliente_ftp);
+        controller_files = new Controller_FTP(cliente_ftp);
         
         list_directorio.addMouseListener(new MouseListener());
         
@@ -222,7 +222,7 @@ public class Home extends javax.swing.JFrame {
         txtp_localizacion_directorio = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Users");
+        setTitle("FTP Client");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Servidor FTP:");
@@ -277,16 +277,31 @@ public class Home extends javax.swing.JFrame {
         btn_crear_carpeta.setText("Crear carpeta");
         btn_crear_carpeta.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_crear_carpeta.setMinimumSize(new java.awt.Dimension(150, 32));
+        btn_crear_carpeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_crear_carpetaActionPerformed(evt);
+            }
+        });
 
         btn_eliminar_carpeta.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btn_eliminar_carpeta.setText("Eliminar carpeta");
         btn_eliminar_carpeta.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_eliminar_carpeta.setMinimumSize(new java.awt.Dimension(150, 32));
+        btn_eliminar_carpeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_carpetaActionPerformed(evt);
+            }
+        });
 
         btn_salir.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btn_salir.setText("Salir");
         btn_salir.setMaximumSize(new java.awt.Dimension(150, 32));
         btn_salir.setMinimumSize(new java.awt.Dimension(150, 32));
+        btn_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salirActionPerformed(evt);
+            }
+        });
 
         list_directorio.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -431,7 +446,11 @@ public class Home extends javax.swing.JFrame {
         
         for (int index : list_directorio.getSelectedIndices()) {
             
-            files_to_delete.add(current_directory + "/"+this.files[index-1].getName());
+            FTPFile file = this.files[index-1];
+            
+            if(!file.isDirectory()){
+                files_to_delete.add(current_directory + "/"+file.getName());
+            }
         }
         
         int num_selected_files = files_to_delete.size();
@@ -448,8 +467,7 @@ public class Home extends javax.swing.JFrame {
                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
                }
            }
-            
-            
+
         }else{
              JOptionPane.showMessageDialog(this,"No has seleccionado ningún archivo",
                 "Error",JOptionPane.ERROR_MESSAGE);
@@ -459,6 +477,55 @@ public class Home extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btn_eliminar_ficheroActionPerformed
+
+    private void btn_eliminar_carpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_carpetaActionPerformed
+        
+        
+        ArrayList<String> directories_to_delete = new ArrayList<String>();
+        
+        for (int index : list_directorio.getSelectedIndices()) {
+            
+            FTPFile folder = this.files[index-1];
+            if (folder.isDirectory()){
+                directories_to_delete.add(current_directory + "//" + folder.getName());
+            }
+        }
+        
+        int num_selected_files = directories_to_delete.size();
+        if(num_selected_files > 0){
+           if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,"Estas a punto de eliminar directorios: " + num_selected_files,
+                "Aviso",JOptionPane.WARNING_MESSAGE)){
+               
+               controller_files.delete_folders(directories_to_delete);
+               try {
+                   refresh_data();
+               } catch (IOException ex) {
+                   Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+
+        }else{
+             JOptionPane.showMessageDialog(this,"No has seleccionado ninguna carpeta",
+                "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_eliminar_carpetaActionPerformed
+
+    private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btn_salirActionPerformed
+
+    private void btn_crear_carpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crear_carpetaActionPerformed
+        
+        String directory_name = JOptionPane.showInputDialog(this,"Introduce el nombre de la nueva carpeta", "Crear Carpeta",JOptionPane.INFORMATION_MESSAGE);
+ 
+        controller_files.create_folder(directory_name);
+        
+        try {
+            refresh_data();
+        } catch (IOException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_crear_carpetaActionPerformed
 
       
     /**

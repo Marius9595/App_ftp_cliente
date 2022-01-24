@@ -23,11 +23,11 @@ import org.apache.commons.net.ftp.FTPFile;
  *
  * @author Mario
  */
-public class Controller_FTP_files {
+public class Controller_FTP {
     
     private FTPClient client;
     
-    public Controller_FTP_files(FTPClient client){
+    public Controller_FTP(FTPClient client){
         this.client = client;
     }
 
@@ -60,7 +60,7 @@ public class Controller_FTP_files {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(Controller_FTP_files.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_FTP.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -79,7 +79,7 @@ public class Controller_FTP_files {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(Controller_FTP_files.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_FTP.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -93,7 +93,34 @@ public class Controller_FTP_files {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(Controller_FTP_files.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_FTP.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    } 
+    
+    
+    public void create_folder(String absolute_path_directory){
+        
+        try {
+            client.makeDirectory(absolute_path_directory);
+        } catch (IOException ex) {
+            Logger.getLogger(Controller_FTP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public void delete_folders(ArrayList<String> absolute_paths_directory){
+        
+        
+        for (String path : absolute_paths_directory) {
+            try {
+                client.removeDirectory(path);
+            } catch (IOException ex) {
+                Logger.getLogger(Controller_FTP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+    }
+
+
 }
